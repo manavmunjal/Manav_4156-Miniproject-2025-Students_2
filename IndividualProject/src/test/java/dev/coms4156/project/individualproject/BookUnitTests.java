@@ -201,4 +201,17 @@ public class BookUnitTests {
     assertEquals("(1)\tA", b.toString());
   }
 
+  /**
+   * Tests hasMultipleAuthors() for a book with single author.
+   */
+
+  @Test
+  public void testHasMultipleAuthorsFalse() {
+    Book b = new Book("Solo", 80);
+    ArrayList<String> authors = new ArrayList<>();
+    authors.add("Manav");
+    b.setAuthors(authors);
+    assertEquals(false, b.hasMultipleAuthors());
+  }
+
 }
