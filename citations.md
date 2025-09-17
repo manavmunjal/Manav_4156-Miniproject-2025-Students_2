@@ -1,1 +1,2 @@
 To understand RequestParam, I used Baeldung website https://www.baeldung.com/spring-request-param
+To understand SuppressWarnings annotation of spring to use with my arraylist in tests, I referred https://www.geeksforgeeks.org/java/the-suppresswarnings-annotation-in-java/
