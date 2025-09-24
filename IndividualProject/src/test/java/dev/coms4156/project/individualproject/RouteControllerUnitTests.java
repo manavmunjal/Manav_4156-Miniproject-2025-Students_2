@@ -12,8 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import java.util.Arrays;
-import java.util.Collections;
 
 /**
 * Unit tests for RouteController methods.
@@ -109,7 +107,7 @@ public class RouteControllerUnitTests {
     MockApiService service = new MockApiService();
     RouteController rc = new RouteController(service);
 
-    // I chose id 4 for testing as it has 3 copies available
+    // I chose id 4 for testing as it has 3 copies available.
     int id = 4;
 
     // find initial copies
@@ -130,7 +128,7 @@ public class RouteControllerUnitTests {
     Book after = (Book) resp.getBody();
     Assertions.assertEquals(initialCopies - 1, after.getCopiesAvailable());
 
-    // ensure the service list reflects the change
+    // ensure the service list reflects the change.
     Book postCheckoutBook = null;
     for (Book b : service.getBooks()) {
       if (b.getId() == id) {
@@ -141,7 +139,7 @@ public class RouteControllerUnitTests {
     Assertions.assertNotNull(postCheckoutBook);
     Assertions.assertEquals(after.getCopiesAvailable(), postCheckoutBook.getCopiesAvailable());
 
-    // checkout copies and expect BAD_REQUEST afterwards
+    // checkout copies and expect BAD_REQUEST afterwards.
     while (postCheckoutBook.getCopiesAvailable() > 0) {
       rc.checkoutBook(id);
       for (Book b : service.getBooks()) {
@@ -161,7 +159,7 @@ public class RouteControllerUnitTests {
    */
   @Test
   public void testRecommendationsInsufficientBooks() {
-    // service with fewer than 10 books
+    // service with fewer than 10 books.
     mockApiService = new MockApiService() {
       @Override
       public ArrayList<Book> getBooks() {
@@ -188,5 +186,121 @@ public class RouteControllerUnitTests {
     RouteController rc = new RouteController(realService);
     ResponseEntity<?> resp = rc.checkoutBook(99999);
     Assertions.assertEquals(HttpStatus.NOT_FOUND, resp.getStatusCode());
+  }
+
+  /**
+   * Tests getAvailableBooks() returns only books with copies available.
+   */
+  @Test
+  public void testGetAvailableBooks() {
+    mockApiService = new MockApiService() {
+      @Override
+      public ArrayList<Book> getBooks() {
+        ArrayList<Book> list = new ArrayList<>();
+        // default simple constructor has copiesAvailable = 1.
+        Book available = new Book("Available", 101);
+
+        // use the full constructor to set copiesAvailable = 0.
+        Book unavailable = new Book(
+            "Unavailable",
+            new ArrayList<>(),
+            "",
+            "",
+            "",
+            "",
+            new ArrayList<>(),
+            102,
+            0,
+            0
+        );
+
+        list.add(available);
+        list.add(unavailable);
+        return list;
+      }
+    };
+
+    RouteController rc = new RouteController(mockApiService);
+    ResponseEntity<?> resp = rc.getAvailableBooks();
+    Assertions.assertEquals(HttpStatus.OK, resp.getStatusCode());
+
+    @SuppressWarnings("unchecked")
+    ArrayList<Book> result = (ArrayList<Book>) resp.getBody();
+    Assertions.assertEquals(1, result.size());
+    Assertions.assertEquals(101, result.get(0).getId());
+  }
+
+
+  /**
+   * Tests addCopy() increments totalCopies and copiesAvailable.
+   */
+  @Test
+  public void testAddCopySuccess() {
+    Book book = new Book("ToAdd", 201);
+    int beforeTotal = book.getTotalCopies();
+    int beforeAvail = book.getCopiesAvailable();
+
+    mockApiService = new MockApiService() {
+      @Override
+      public ArrayList<Book> getBooks() {
+        ArrayList<Book> list = new ArrayList<>();
+        list.add(book);
+        return list;
+      }
+    };
+
+    RouteController rc = new RouteController(mockApiService);
+    ResponseEntity<?> resp = rc.addCopy(201);
+    Assertions.assertEquals(HttpStatus.OK, resp.getStatusCode());
+    Book updated = (Book) resp.getBody();
+    Assertions.assertEquals(beforeTotal + 1, updated.getTotalCopies());
+    Assertions.assertEquals(beforeAvail + 1, updated.getCopiesAvailable());
+  }
+
+  /**
+   * Tests addCopy() with a non-existent book id returns 404.
+   */
+  @Test
+  public void testAddCopyNotFound() {
+    RouteController rc = new RouteController(mockApiService);
+    ResponseEntity<?> resp = rc.addCopy(9999);
+    Assertions.assertEquals(HttpStatus.NOT_FOUND, resp.getStatusCode());
+    Assertions.assertEquals("Book not found.", resp.getBody());
+  }
+
+  /**
+   * Tests getAvailableBooks() handles exceptions with 500.
+   */
+  @Test
+  public void testGetAvailableBooksException() {
+    mockApiService = new MockApiService() {
+      @Override
+      public ArrayList<Book> getBooks() {
+        throw new RuntimeException("Simulated failure");
+      }
+    };
+
+    RouteController rc = new RouteController(mockApiService);
+    ResponseEntity<?> resp = rc.getAvailableBooks();
+    Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, resp.getStatusCode());
+    Assertions.assertEquals("Error occurred when getting all available books", resp.getBody());
+  }
+
+  /**
+   * Tests addCopy() handles exceptions gracefully with 500.
+   */
+  @Test
+  public void testAddCopyException() {
+    mockApiService = new MockApiService() {
+      @Override
+      public ArrayList<Book> getBooks() {
+        throw new RuntimeException("Simulated failure");
+      }
+    };
+
+    RouteController rc = new RouteController(mockApiService);
+    ResponseEntity<?> resp = rc.addCopy(123);
+    Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, resp.getStatusCode());
+    Assertions.assertEquals("Error occurred when adding a copy.", resp.getBody());
   }
 }
