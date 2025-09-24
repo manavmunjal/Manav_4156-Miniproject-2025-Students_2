@@ -22,10 +22,10 @@ jobs:
         distribution: 'temurin'
         cache: 'maven'
 
-    - name: Build with Maven
-      run: mvn -B package --file IndividualProject/pom.xml
+    - name: Compile with Maven
+      run: mvn -B compile
       working-directory: ./IndividualProject
 
     - name: Run tests
-      run: mvn test --file IndividualProject/pom.xml
+      run: mvn -B test
       working-directory: ./IndividualProject
