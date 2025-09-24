@@ -126,7 +126,8 @@ public class RouteController {
       List<Book> booksCopy = new ArrayList<>(allBooks);
 
       // Sort by popularity (amountOfTimesCheckedOut) descending
-      booksCopy.sort((a, b) -> Integer.compare(b.getAmountOfTimesCheckedOut(), a.getAmountOfTimesCheckedOut()));
+      booksCopy.sort((a, b) -> 
+          Integer.compare(b.getAmountOfTimesCheckedOut(), a.getAmountOfTimesCheckedOut()));
 
       List<Book> recommendations = new ArrayList<>();
       Set<Integer> ids = new HashSet<>();
