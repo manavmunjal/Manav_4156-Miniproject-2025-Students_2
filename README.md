@@ -46,19 +46,34 @@ Use the green "Code" button on GitHub to copy the HTTPS link and clone in your I
 Below are the main endpoints provided by the service in `RouteController.java`:
 
 - **GET `/books/available`**  
-  Returns a list of all books that currently have at least one available copy.
+  **Description:** Returns a list of all books that currently have at least one available copy.  
+  **Input:** None  
+  **Upon Success:** HTTP 200 with a JSON array of available books  
+  **Upon Failure:** HTTP 500 with error message
 
 - **GET `/book/{id}`**  
-  Returns details of the book with the specified ID.
+  **Description:** Returns details of the book with the specified ID.  
+  **Input:** Path variable `id` (integer)  
+  **Upon Success:** HTTP 200 with the book's JSON details  
+  **Upon Failure:** HTTP 404 if book not found; HTTP 500 with error message
 
 - **PATCH `/book/{id}/add`**  
-  Adds a copy to the book with the specified ID.
+  **Description:** Adds a copy to the book with the specified ID.  
+  **Input:** Path variable `id` (integer)  
+  **Upon Success:** HTTP 200 with updated book JSON  
+  **Upon Failure:** HTTP 404 if book not found; HTTP 500 with error message
 
 - **GET `/books/recommendation`**  
-  Returns a list of 10 recommended books (5 most popular, 5 random).
+  **Description:** Returns a list of 10 recommended books (5 most popular, 5 random).  
+  **Input:** None  
+  **Upon Success:** HTTP 200 with a JSON array of 10 unique recommended books  
+  **Upon Failure:** HTTP 500 with error message
 
 - **GET `/checkout`**  
-  Checks out a copy of the book specified by the `id` query parameter.
+  **Description:** Checks out a copy of the book specified by the `id` query parameter.  
+  **Input:** Query parameter `id` (integer)  
+  **Upon Success:** HTTP 200 with updated book JSON  
+  **Upon Failure:** HTTP 400 if no copies available; HTTP 404 if book not found; HTTP 500 with error message
 
 ---
 
