@@ -77,6 +77,16 @@ Below are the main endpoints provided by the service in `RouteController.java`:
 
 ---
 
+## Postman Documentation
+
+Comprehensive API documentation and example requests for all endpoints are available in our Postman workspace:
+
+[View Postman Documentation](https://manavmunjal9099-4557107.postman.co/workspace/Manav-Munjal's-Workspace~b2530606-79ce-4a8c-8e30-90884e26c469/collection/48789066-15c25584-b506-4465-a01f-1613fdf94220?action=share&source=copy-link&creator=48789066)
+
+This collection includes sample requests, expected responses, and usage notes for each endpoint in the service.
+
+---
+
 ## Unit Test Coverage Report
 
 Below is a screenshot of the unit test coverage report for this project, showing both line and branch coverage as measured by JaCoCo:
