@@ -77,6 +77,25 @@ Below are the main endpoints provided by the service in `RouteController.java`:
 
 ---
 
+## Unit Test Coverage Report
+
+Below is a screenshot of the unit test coverage report for this project, showing both line and branch coverage as measured by JaCoCo:
+
+<img width="1555" height="307" alt="image" src="https://github.com/user-attachments/assets/6cfd7d30-9a38-4b04-bab5-6769905690f5" />
+
+
+This report demonstrates the effectiveness of our test suite in covering the main logic and branches of the codebase.
+
+---
+
+## Checkstyle Violations
+
+As evident from the screenshot after running mvn checkstyle:check, there are 0 violations.
+
+<img width="1208" height="141" alt="image" src="https://github.com/user-attachments/assets/4bf6d5fc-87d5-4b2e-bec0-c211e89f0555" />
+
+---
+
 ## Continuous Integration (CI)
 
 This repository uses **GitHub Actions** for continuous integration.  
