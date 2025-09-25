@@ -41,6 +41,27 @@ Use the green "Code" button on GitHub to copy the HTTPS link and clone in your I
 
 ---
 
+## Endpoints
+
+Below are the main endpoints provided by the service in `RouteController.java`:
+
+- **GET `/books/available`**  
+  Returns a list of all books that currently have at least one available copy.
+
+- **GET `/book/{id}`**  
+  Returns details of the book with the specified ID.
+
+- **PATCH `/book/{id}/add`**  
+  Adds a copy to the book with the specified ID.
+
+- **GET `/books/recommendation`**  
+  Returns a list of 10 recommended books (5 most popular, 5 random).
+
+- **GET `/checkout`**  
+  Checks out a copy of the book specified by the `id` query parameter.
+
+---
+
 ## Continuous Integration (CI)
 
 This repository uses **GitHub Actions** for continuous integration.  
